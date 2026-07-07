@@ -108,24 +108,6 @@ pip install -r requirements.txt
 
 ---
 
-## 🔑 Environment Variables
-
-Create a `.env` file in the project root.
-
-```env
-SECRET_KEY=your_secret_key
-
-GEMINI_API_KEY=your_google_gemini_api_key
-
-SMTP_EMAIL=your_email@gmail.com
-SMTP_APP_PASSWORD=your_app_password
-CONTACT_RECEIVER_EMAIL=your_email@gmail.com
-```
-
-> **Important:** Never commit your API keys or email credentials to GitHub.
-
----
-
 ## ▶️ Running the Project
 
 ```bash
@@ -140,36 +122,6 @@ http://127.0.0.1:5000
 
 ---
 
-## 📡 API Endpoints
-
-### Authentication
-
-- POST `/api/auth/register`
-- POST `/api/auth/login`
-- POST `/api/auth/logout`
-- GET `/api/auth/me`
-
-### Route Planning
-
-- POST `/api/route`
-- GET `/api/route/alternatives`
-
-### History
-
-- GET `/api/history`
-- GET `/api/history/mine`
-- DELETE `/api/history/<id>`
-
-### Statistics
-
-- GET `/api/history/stats`
-- GET `/api/history/mine/stats`
-
-### Health Check
-
-- GET `/health`
-
----
 
 ## 🧠 Route Optimization Process
 
@@ -204,7 +156,7 @@ http://127.0.0.1:5000
 ## 👨‍💻 Developed By
 
 **Vaisshnave**
-**kashish**
+**Kashish**
 
 ---
 
