@@ -186,18 +186,7 @@ http://127.0.0.1:5000
 
 ---
 
-## 📸 Screenshots
 
-Add screenshots here.
-
-- Home Page
-- Route Planner
-- History
-- Profile
-- Sign In
-- Dashboard
-
----
 
 ## 🚀 Future Improvements
 
@@ -215,11 +204,7 @@ Add screenshots here.
 ## 👨‍💻 Developed By
 
 **Vaisshnave**
+**kashish**
 
 ---
 
-## 📄 License
-
-This project is developed for educational and academic purposes.
-
-Feel free to modify and extend it for learning or research.
