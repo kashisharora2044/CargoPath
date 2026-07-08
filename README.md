@@ -10,6 +10,8 @@ CargoPath is an AI-powered logistics and route optimization platform that helps 
 - 📦 Cargo-specific route recommendations
 - 💰 Profit estimation and transportation cost analysis
 - 🤖 AI-generated route explanations using Google Gemini
+- 🗺️ Interactive map visualization with Leaflet.js for route planning
+- 🌦️ Real-time weather information along routes to support safer transportation decisions
 - 👤 User authentication (Sign Up / Sign In)
 - 📜 Route history tracking
 - 📊 Route statistics dashboard
