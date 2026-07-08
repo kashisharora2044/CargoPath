@@ -840,3 +840,13 @@ img { max-width: 100%; display: block; }
   .form-row { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; }
 }
+/* Clicking an alternative route line (an interactive SVG <path> inside
+   Leaflet) makes it keyboard-focusable, and by default the browser draws
+   a focus outline around that path's bounding box. For a diagonal route
+   this bounding box spans corner-to-corner across the whole map, showing
+   up as a big blue rectangle. Suppress the default outline and rely on
+   Leaflet's own hover/selection styling (color + width change) instead. */
+.leaflet-interactive:focus,
+.leaflet-interactive:focus-visible {
+  outline: none;
+}
