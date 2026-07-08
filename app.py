@@ -111,21 +111,19 @@ def _gemini_explain(prompt, cargo_name=None, cargo=None, route=None, profit=None
     Try Gemini with up to 2 retries on 429 rate-limit errors.
     If still failing, return a smart rule-based explanation built from route data.
     """
-    import time, re
-
-    for attempt in range(3):
-        try:
-            return gemini_model.generate_content(prompt).text.strip()
-        except Exception as e:
-            err = str(e)
-            # Extract retry-after seconds from the error message
-            match = re.search(r'retry.*?(\d+).*?s', err, re.IGNORECASE)
-            wait  = int(match.group(1)) if match else 15
-            if '429' in err and attempt < 2:
-                time.sleep(min(wait, 20))   # wait up to 20s then retry
-                continue
-            # All retries exhausted or non-429 error → smart fallback
-            break
+    # NOTE: this runs inline in the request/response cycle, so it must stay
+    # fast. Previously this retried up to 3x on 429s with real time.sleep()
+    # calls of up to 20s between attempts, which alone could add ~40s to
+    # every route request. We now make a single, time-boxed attempt and
+    # fall straight through to the instant rule-based explanation below if
+    # Gemini doesn't respond quickly (no blocking sleeps).
+    try:
+        return gemini_model.generate_content(
+            prompt,
+            request_options={"timeout": 5},  # seconds; fail fast instead of hanging
+        ).text.strip()
+    except Exception:
+        pass  # any error (429, timeout, etc.) -> smart fallback below
 
     # ── Smart fallback explanation built from route data ──────────────────
     if not (cargo and route and profit):
