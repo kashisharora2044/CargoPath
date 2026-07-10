@@ -565,6 +565,15 @@ html, body { overflow: hidden; height: 100%; }
   overflow: hidden;
   margin-bottom: 20px;
 }
+.seg-table-wrap {
+  /* The segment table has 5 columns (From→To, Distance, Roughness, Road
+     Quality, Edge Cost) which don't fit on narrow screens. Previously
+     .table-card's overflow:hidden silently clipped the right-hand columns
+     (Road Quality, Edge Cost) instead of showing them. This lets the table
+     scroll horizontally so every column stays visible/reachable. */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .table-card-header {
   padding: 16px 24px;
   border-bottom: 1px solid var(--border);
@@ -579,6 +588,7 @@ html, body { overflow: hidden; height: 100%; }
 }
 .seg-table {
   width: 100%;
+  min-width: 640px;
   border-collapse: collapse;
   font-size: 14px;
 }
@@ -852,8 +862,6 @@ html, body { overflow: hidden; height: 100%; }
 @media (max-width: 600px) {
   .metrics-grid { grid-template-columns: 1fr 1fr; }
   .result-header { flex-direction: column; }
-  .seg-table th:nth-child(3),
-  .seg-table td:nth-child(3) { display: none; }
 }
 </style>
 </head>
@@ -1113,6 +1121,7 @@ html, body { overflow: hidden; height: 100%; }
             <h4>Segment Breakdown</h4>
             <span style="font-size:12px;color:var(--text-muted)" id="rSegCount">—</span>
           </div>
+          <div class="seg-table-wrap">
           <table class="seg-table">
             <thead>
               <tr>
@@ -1125,6 +1134,7 @@ html, body { overflow: hidden; height: 100%; }
             </thead>
             <tbody id="segTableBody"></tbody>
           </table>
+          </div>
         </div>
 
         <div class="finance-card">
@@ -1257,6 +1267,7 @@ function calcProfit(route,fragility,profitPerKm,handlingCost,units){
 
 let cargoType='goods';
 let currentResult=null;
+let aiTypeInterval=null; // tracks the in-flight AI-text typewriter animation so overlapping calls don't interleave characters
 
 function switchTab(tab){
   document.querySelectorAll('.panel-tab').forEach((t,i)=>{
@@ -1567,11 +1578,15 @@ function renderResult(from,to,cargo,frag,units,route,profit,alts,aiServerText){
 
   const aiEl=document.getElementById('aiText');
   const aiText=aiServerText||generateAIExplanation(from,to,cargo,frag,route,profit);
+  // Stop any typewriter animation still running from a previous route/render —
+  // without this, two intervals could both be appending to aiEl.textContent
+  // at once, interleaving their characters into garbled text.
+  if(aiTypeInterval){ clearInterval(aiTypeInterval); aiTypeInterval=null; }
   aiEl.textContent='';
   let i=0;
-  const aiInt=setInterval(()=>{
+  aiTypeInterval=setInterval(()=>{
     if(i<aiText.length){ aiEl.textContent+=aiText[i]; i++; }
-    else clearInterval(aiInt);
+    else { clearInterval(aiTypeInterval); aiTypeInterval=null; }
   },12);
 
   const altList=document.getElementById('altList');
